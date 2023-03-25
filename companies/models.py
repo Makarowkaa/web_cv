@@ -11,6 +11,16 @@ class Company(models.Model):
         country (str): The country where the company is located
         email (str): The email of the company
         website (str): The website of the company
+
+    Methods:
+        get_by_id: Retrieves a company by its id
+        delete_by_id: Deletes a company by its id
+        get_all: Retrieves all companies
+        get_by_name: Retrieves a company by its name
+        get_by_country: Retrieves a company by its country
+        get_by_email: Retrieves a company by its email
+        create: Creates a new company
+        update: Updates an existing company
     """
     id = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=255)
