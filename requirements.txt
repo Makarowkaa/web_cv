@@ -7,3 +7,4 @@ psycopg2-binary==2.9.5
 django-crispy-forms==2.0
 crispy-bootstrap5==0.7
 django-jazzmin==2.6.0
+Celery==5.2.7
