@@ -16,7 +16,7 @@ class CompanySelectionForm(forms.Form):
     """
     company_name = forms.CharField(label='Company Name', max_length=255)
     country = forms.CharField(label='Country', max_length=255, required=False)
-    companies = forms.ModelChoiceField(queryset=Company.objects.all(), widget=forms.CheckboxSelectMultiple)
+    companies = forms.ModelMultipleChoiceField(queryset=Company.objects.all(), widget=forms.CheckboxSelectMultiple)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
