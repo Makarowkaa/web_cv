@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from .forms import CompanySelectionForm
 from .models import Company
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CompanyView(View):
@@ -9,27 +12,32 @@ class CompanyView(View):
     form_class = CompanySelectionForm
 
     def get(self, request, *args, **kwargs):
+        logger.debug('Rendering CompannyView')
         form = self.form_class()
         companies = Company.objects.all()
-        country = {'choice_label': 'country'}
+
         context = {
             'form': form,
             'companies': companies,
-            'country': country,
         }
+
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        logger.debug('Processing CompannyView POST')
         form = self.form_class(request.POST)
-        companies = Company.objects.all()
-        country = {'choice_label': 'country'}
+        companies = []
+
         if form.is_valid():
-            companies = form.filter_companies()
+            selected_companies = form.cleaned_data['companies']
+            for company in selected_companies:
+                companies.append(company)
+
         context = {
             'form': form,
             'companies': companies,
-            'country': country,
         }
+
         return render(request, self.template_name, context)
 
 
