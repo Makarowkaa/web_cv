@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Companies</h2>
+        <form method="post">
+          {% csrf_token %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Country</th>
+                <th>Select</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for company in companies %}
+                <tr>
+                  <td>{{ company.company_name }}</td>
+                  <td>{{ company.country }}</td>
+                  <td>
+                    <div class="form-check">
+                      <label class="form-check-label" for="{{ company.id_for_label }}">
+                        <input class="form-check-input" type="checkbox" name="companies" value="{{ company.id }}">
+                      </label>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3">No companies found.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
