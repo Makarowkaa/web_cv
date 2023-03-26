@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ company.company_name }}{% endblock %}
+
+{% block content %}
+    <h2>{{ company.company_name }}</h2>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Country:</strong> {{ company.country }}</p>
+            <p><strong>Email:</strong> {{ company.email }}</p>
+            <p><strong>Website:</strong> {{ company.website }}</p>
+        </div>
+    </div>
+{% endblock %}
