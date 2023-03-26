@@ -5,61 +5,31 @@ from .models import Company
 
 
 class CompanyView(View):
-    """
-    A view for selecting companies
-
-    Attributes:
-        template_name (str): The name of the template
-        form_class (Form): The form class
-
-    Methods:
-        get: Renders the template
-        post: Renders the template
-    """
     template_name = 'companies/companies.html'
     form_class = CompanySelectionForm
 
     def get(self, request, *args, **kwargs):
-        """
-        Renders the template
-
-        Args:
-            request (HttpRequest): The request object
-
-        Returns:
-            HttpResponse: The response object
-        """
         form = self.form_class()
-        companies = []
-
+        companies = Company.objects.all()
+        country = {'choice_label': 'country'}
         context = {
             'form': form,
-            'companies': companies
+            'companies': companies,
+            'country': country,
         }
-
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        """
-        Renders the template
-
-        Args:
-            request (HttpRequest): The request object
-
-        Returns:
-            HttpResponse: The response object
-        """
         form = self.form_class(request.POST)
-        companies = []
-
+        companies = Company.objects.all()
+        country = {'choice_label': 'country'}
         if form.is_valid():
             companies = form.filter_companies()
-
         context = {
             'form': form,
-            'companies': companies
+            'companies': companies,
+            'country': country,
         }
-
         return render(request, self.template_name, context)
 
 

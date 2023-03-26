@@ -1,4 +1,6 @@
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from .models import Company
 
 
@@ -21,6 +23,19 @@ class CompanySelectionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['companies'].queryset = Company.objects.none()
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            Fieldset(
+                'Select Companies',
+                'company_name',
+                'country',
+                'companies'
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit')
+            )
+        )
 
     def filter_companies(self):
         """
