@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+</head>
+<body>
+    <header>
+        {% block header %}
+        <h1>Web CV Mailing</h1>
+        {% endblock %}
+    </header>
+    <main>
+        {% block content %}
+        <p>Welcome to Web CV Mailing!</p>
+        {% endblock %}
+    </main>
+    <footer>
+        {% block footer %}
+        <p>&copy; 2023 Web CV Mailing</p>
+        {% endblock %}
+    </footer>
+</body>
+</html>
