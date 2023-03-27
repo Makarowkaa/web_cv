@@ -1,8 +1,5 @@
 from django import forms
 from .models import Company
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 class CompanySelectionForm(forms.Form):
@@ -16,10 +13,4 @@ class CompanySelectionForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        logger.debug('Initializing form')
         self.fields['companies'].queryset = Company.objects.all()
-
-    def clean(self):
-        cleaned_data = super().clean()
-        logger.debug('Cleaned data: %s', cleaned_data)
-        return cleaned_data
