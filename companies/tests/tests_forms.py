@@ -11,7 +11,6 @@ class CompanySelectionFormTestCase(TestCase):
     def test_valid_form(self):
         form_data = {'companies': [self.company1.pk]}
         form = CompanySelectionForm(data=form_data)
-        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_invalid_form(self):
