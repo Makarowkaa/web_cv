@@ -53,9 +53,10 @@ class CompanyView(View):
                 company_dicts.append({
                     'id': company.id,
                     'name': company.company_name,
+                    'email': company.email,
                 })
             request.session['selected_companies'] = company_dicts
-            return redirect('')  # TODO: Add the correct redirect
+            return redirect('send_email')
 
         context = {
             'form': form,
