@@ -54,20 +54,19 @@ class MailingView(View):
             cover_letter = form.cleaned_data['cover_letter']
             cv = request.FILES.get('cv')
 
-            recipients = [company['email'] for company in selected_companies]
+            for company in selected_companies:
+                email = EmailMessage(
+                    subject=subject,
+                    body=cover_letter,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=[company['email']],
+                    reply_to=[settings.EMAIL_HOST_USER],
+                )
 
-            email = EmailMessage(
-                subject=subject,
-                body=cover_letter,
-                from_email=settings.EMAIL_HOST_USER,
-                to=recipients,
-                reply_to=[settings.EMAIL_HOST_USER],
-            )
+                if cv:
+                    email.attach(cv.name, cv.read(), cv.content_type)
 
-            if cv:
-                email.attach(cv.name, cv.read(), cv.content_type)
-
-            email.send()
+                email.send()
 
             del request.session['selected_companies']
 
