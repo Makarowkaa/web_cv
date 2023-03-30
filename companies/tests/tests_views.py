@@ -18,13 +18,13 @@ class CompanyViewTestCase(TestCase):
         self.assertQuerysetEqual(response.context['companies'], Company.objects.all(),
                                  transform=lambda x: x, ordered=False)
 
-    # def test_post_valid(self):
-    #     data = {'companies': [self.company1.id, self.company2.id]}
-    #     response = self.client.post(self.url, data)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertListEqual(self.client.session['selected_companies'],
-    #                          [{'id': self.company1.id, 'name': self.company1.company_name},
-    #                           {'id': self.company2.id, 'name': self.company2.company_name}])
+    def test_post_valid(self):
+        data = {'companies': [self.company1.id, self.company2.id]}
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertListEqual(self.client.session['selected_companies'],
+                             [{'id': self.company1.id, 'name': self.company1.company_name},
+                              {'id': self.company2.id, 'name': self.company2.company_name}])
 
     def test_post_invalid(self):
         data = {'companies': [self.company1.id, 999]}
