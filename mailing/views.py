@@ -4,6 +4,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 
 from .forms import MailingForm
+from companies.models import Company
 
 
 class MailingView(View):
@@ -29,11 +30,11 @@ class MailingView(View):
             A rendered template with the email sending form
         """
         form = self.form_class()
-        selected_companies = request.session.get('selected_companies', [])
+        selected_company_ids = request.session.get('selected_company_ids', [])
 
         context = {
             'form': form,
-            'selected_companies': selected_companies,
+            'selected_company_ids': selected_company_ids,
         }
 
         return render(request, self.template_name, context)
@@ -47,19 +48,21 @@ class MailingView(View):
 
         """
         form = self.form_class(request.POST, request.FILES)
-        selected_companies = request.session.get('selected_companies', [])
+        selected_company_ids = request.session.get('selected_company_ids', [])
 
         if form.is_valid():
             subject = form.cleaned_data['subject']
             cover_letter = form.cleaned_data['cover_letter']
             cv = request.FILES.get('cv')
 
-            for company in selected_companies:
+            companies = Company.objects.filter(id__in=selected_company_ids)
+
+            for company in companies:
                 email = EmailMessage(
                     subject=subject,
                     body=cover_letter,
                     from_email=settings.EMAIL_HOST_USER,
-                    to=[company['email']],
+                    to=[company.email],
                     reply_to=[settings.EMAIL_HOST_USER],
                 )
 
@@ -68,13 +71,13 @@ class MailingView(View):
 
                 email.send()
 
-            del request.session['selected_companies']
+            del request.session['selected_company_ids']
 
             # return redirect('mailing:success')
 
         context = {
             'form': form,
-            'selected_companies': selected_companies,
+            'selected_company_ids': selected_company_ids,
         }
 
         return render(request, self.template_name, context)
