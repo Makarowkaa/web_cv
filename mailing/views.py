@@ -47,7 +47,7 @@ class MailingView(View):
 
             del request.session['selected_companies']
 
-            return redirect('mailing:success')
+            # return redirect('mailing:success')
 
         context = {
             'form': form,
