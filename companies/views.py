@@ -28,6 +28,13 @@ class CompanyView(View):
         """
         form = self.form_class()
         companies = Company.objects.all()
+        selected_company_ids = request.session.get('selected_company_ids', [])
+
+        for company in companies:
+            if company.id in selected_company_ids:
+                company.selected = True
+            else:
+                company.selected = False
 
         context = {
             'form': form,
@@ -44,23 +51,25 @@ class CompanyView(View):
             A redirect to the appropriate page.
         """
         form = self.form_class(request.POST)
-        selected_companies = []
+        selected_company_ids = []
 
         if form.is_valid():
             selected_companies = form.cleaned_data['companies']
-            company_dicts = []
             for company in selected_companies:
-                company_dicts.append({
-                    'id': company.id,
-                    'name': company.company_name,
-                    'email': company.email,
-                })
-            request.session['selected_companies'] = company_dicts
+                selected_company_ids.append(company.id)
+
+            request.session['selected_company_ids'] = selected_company_ids
+
             return redirect('send_email')
+
+        companies = Company.objects.all()
+
+        for company in companies:
+            company.selected = False
 
         context = {
             'form': form,
-            'companies': selected_companies,
+            'companies': companies,
         }
 
         return render(request, self.template_name, context)
