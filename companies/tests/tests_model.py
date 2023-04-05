@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from companies.models import Company
 
 
