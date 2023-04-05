@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
-from django.core.mail import EmailMessage
-from django.conf import settings
 
 from .forms import MailingForm
-from companies.models import Company
+from .tasks import send_email_task
 
 
 class MailingView(View):
@@ -44,7 +42,7 @@ class MailingView(View):
         Processes the email sending form and redirects to the appropriate page.
 
         Returns:
-            A redirect to the appropriate page.
+            A rendered template with the email sending form
 
         """
         form = self.form_class(request.POST, request.FILES)
@@ -55,25 +53,9 @@ class MailingView(View):
             cover_letter = form.cleaned_data['cover_letter']
             cv = request.FILES.get('cv')
 
-            companies = Company.objects.filter(id__in=selected_company_ids)
-
-            for company in companies:
-                email = EmailMessage(
-                    subject=subject,
-                    body=cover_letter,
-                    from_email=settings.EMAIL_HOST_USER,
-                    to=[company.email],
-                    reply_to=[settings.EMAIL_HOST_USER],
-                )
-
-                if cv:
-                    email.attach(cv.name, cv.read(), cv.content_type)
-
-                email.send()
+            send_email_task.delay(subject, cover_letter, cv, selected_company_ids)
 
             del request.session['selected_company_ids']
-
-            # return redirect('mailing:success')
 
         context = {
             'form': form,
