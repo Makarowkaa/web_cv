@@ -23,15 +23,14 @@ class CompanyViewTestCase(TestCase):
         data = {'companies': [self.company1.id, self.company2.id]}
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 302)
-        self.assertListEqual(self.client.session['selected_companies'],
-                             [{'id': self.company1.id, 'name': self.company1.company_name},
-                              {'id': self.company2.id, 'name': self.company2.company_name}])
+        selected_company_ids = self.client.session.get('selected_company_ids', [])
+        self.assertListEqual(selected_company_ids, [self.company1.id, self.company2.id])
 
     def test_post_invalid(self):
         data = {'companies': [self.company1.id, 999]}
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertIsNone(self.client.session.get('selected_companies'))
+        self.assertIsNone(self.client.session.get('selected_company_ids'))
 
 
 class CompanyListViewTestCase(TestCase):
