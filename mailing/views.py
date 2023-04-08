@@ -52,8 +52,9 @@ class MailingView(View):
             subject = form.cleaned_data['subject']
             cover_letter = form.cleaned_data['cover_letter']
             cv = request.FILES.get('cv')
+            user_email = form.cleaned_data['user_email']
 
-            send_email_task.delay(subject, cover_letter, cv, selected_company_ids)
+            send_email_task.delay(subject, cover_letter, cv, selected_company_ids, user_email)
 
             del request.session['selected_company_ids']
 

@@ -15,9 +15,10 @@ class SendEmailTaskTestCase(TestCase):
         self.cover_letter = 'Test email body'
         self.cv = SimpleUploadedFile('test_cv.pdf', b'Test CV content', content_type='application/pdf')
         self.selected_company_ids = [self.company1.id, self.company2.id]
+        self.user_email = 'test_reply_to@example.com'
 
     def test_send_email_task(self):
-        send_email_task(self.subject, self.cover_letter, self.cv, self.selected_company_ids)
+        send_email_task(self.subject, self.cover_letter, self.cv, self.selected_company_ids, self.user_email)
 
         # Assert that emails were sent to both companies
         self.assertEqual(len(mail.outbox), 1)
@@ -34,4 +35,4 @@ class SendEmailTaskTestCase(TestCase):
 
         # Assert that the email was sent from the correct address and has the correct reply-to address
         self.assertEqual(mail.outbox[0].from_email, settings.EMAIL_HOST_USER)
-        self.assertEqual(mail.outbox[0].reply_to, [settings.EMAIL_HOST_USER])
+        self.assertEqual(mail.outbox[0].reply_to, [self.user_email])

@@ -21,6 +21,7 @@ class MailingForm(forms.Form):
     subject = forms.CharField(max_length=100)
     cover_letter = forms.CharField(widget=forms.Textarea)
     cv = forms.FileField(label='CV (PDF, DOC, DOCX, 1 MB max)')
+    user_email = forms.EmailField(label='Your email')
 
     def clean_cv(self):
         """

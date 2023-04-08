@@ -7,7 +7,7 @@ from companies.models import Company
 
 
 @shared_task(bind=True)
-def send_email_task(self, subject, cover_letter, cv, selected_company_ids):
+def send_email_task(self, subject, cover_letter, cv, selected_company_ids, user_email):
     """
     A task for sending emails to the selected companies
 
@@ -25,7 +25,7 @@ def send_email_task(self, subject, cover_letter, cv, selected_company_ids):
         body=cover_letter,
         from_email=settings.EMAIL_HOST_USER,
         bcc=[company.email for company in companies],
-        reply_to=[settings.EMAIL_HOST_USER],
+        reply_to=[user_email],
     )
 
     email.attach(cv.name, cv.read(), cv.content_type)
