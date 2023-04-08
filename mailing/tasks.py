@@ -20,17 +20,14 @@ def send_email_task(self, subject, cover_letter, cv, selected_company_ids):
 
     companies = Company.objects.filter(id__in=selected_company_ids)
 
-    cv_content = cv.read()
+    email = EmailMessage(
+        subject=subject,
+        body=cover_letter,
+        from_email=settings.EMAIL_HOST_USER,
+        bcc=[company.email for company in companies],
+        reply_to=[settings.EMAIL_HOST_USER],
+    )
 
-    for company in companies:
-        email = EmailMessage(
-            subject=subject,
-            body=cover_letter,
-            from_email=settings.EMAIL_HOST_USER,
-            to=[company.email],
-            reply_to=[settings.EMAIL_HOST_USER],
-        )
+    email.attach(cv.name, cv.read(), cv.content_type)
 
-        email.attach(cv.name, cv_content, cv.content_type)
-
-        email.send()
+    email.send()
