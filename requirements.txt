@@ -9,3 +9,4 @@ crispy-bootstrap5==0.7
 django-jazzmin==2.6.0
 Celery==5.2.7
 eventlet==0.33.3 # for Celery to work on Windows
+python-dotenv==1.0.0

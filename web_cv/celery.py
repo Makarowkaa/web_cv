@@ -10,8 +10,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 app.conf.update(
-    broker_url='pyamqp://guest:guest@localhost:5672//',
-    result_backend='rpc://guest:guest@localhost:5672//',
+    broker_url='pyamqp://guest@rabbitmq//',
+    result_backend='rpc://guest@rabbitmq//',
     accept_content=['pickle'],
     task_serializer='pickle',
     result_serializer='pickle',
